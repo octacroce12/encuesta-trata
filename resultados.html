@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Resultados de la encuesta</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1f2328;--muted:#5b616b;--accent:#7a2e3a;--bar:#a9505f;--track:#ece7de;--line:#e2ddd3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181b;--card:#212328;--ink:#e9e7e2;--muted:#a3a7ae;--accent:#d98a96;--bar:#c86c7b;--track:#2e3036;--line:#34363c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.5rem;margin:0 0 4px}
+h2{color:var(--accent);font-size:1.15rem;margin:28px 0 12px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.sub{color:var(--muted);margin:0 0 16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.login{display:flex;gap:8px;flex-wrap:wrap}
+input[type=password]{flex:1;min-width:180px;font:inherit;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+button{font:inherit;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;font-weight:600}
+button.sec{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.big{font-size:2.2rem;font-weight:800;color:var(--accent);line-height:1}
+.chart h3{margin:0 0 10px;font-size:.98rem}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 140px 54px;gap:8px;align-items:center;font-size:.88rem;margin:4px 0}
+.track{background:var(--track);border-radius:4px;height:14px;overflow:hidden}
+.fill{background:var(--bar);height:100%}
+.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+@media (max-width:520px){.row{grid-template-columns:minmax(0,1fr) 70px 50px}}
+.com{border-left:3px solid var(--bar);padding-left:10px;margin:10px 0;font-style:italic}
+.err{color:#b3261e;font-weight:600}
+#res{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Resultados de la encuesta sobre trata de personas</h1>
+<p class="sub">Doctrina Social de la Iglesia · Tema 11</p>
+
+<div class="box">
+  <div class="login">
+    <input type="password" id="clave" placeholder="Clave de acceso">
+    <button id="ver">Ver resultados</button>
+  </div>
+  <p class="err" id="err"></p>
+</div>
+
+<div id="res">
+  <div class="box"><span class="big" id="total">0</span> respuestas recibidas <span class="sub" id="upd"></span>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button id="reload" class="sec">Actualizar</button><button id="csv" class="sec">Descargar CSV</button></div>
+  </div>
+  <h2>Resultados por pregunta</h2>
+  <div id="charts"></div>
+  <h2>Comentarios</h2>
+  <div class="box" id="coms"></div>
+</div>
+</div>
+
+<script>
+// Misma URL de Apps Script que en index.html
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvy_4gvbq1bUNY8BaDPSzTjvZ1rbIHEG3j6Js-DcJZLsCxoKTvHP0CDk5ufFEpKpNr/exec";
+const Q = {
+ p1:{type:"radio",opts:["18 a 25","26 a 35","36 a 50","51 a 65","66 o más"]},
+ p2:{type:"radio",opts:["Mujer","Varón","Otro / prefiero no decir"]},
+ p3:{type:"radio",opts:["Primario","Secundario incompleto","Secundario completo","Terciario o universitario (en curso o completo)"]},
+ p4:{type:"radio",opts:["Católica","Evangélica / protestante","Judía","Musulmana","Otra","Ninguna"]},
+ p5:{type:"radio",opts:["Sí, regularmente","A veces","No"]},
+ p6:{type:"radio",opts:["Ciudad de Buenos Aires","Conurbano bonaerense","Interior del país"]},
+ p7:{type:"radio",opts:[
+   "Captar, trasladar o recibir personas para explotarlas (sexual, laboralmente u otras formas)",
+   "Es lo mismo que la prostitución",
+   "Es pasar personas por la frontera de forma ilegal",
+   "No sé bien qué es"]},
+ p8:{type:"check",opts:["Explotación sexual","Explotación laboral (talleres textiles, campo, construcción)","Servidumbre o trabajo doméstico forzado","Matrimonio forzado","Mendicidad forzada","Extracción de órganos","No conozco ninguna"]},
+ p9:{type:"radio",opts:["Sí, la conozco","Escuché hablar, pero no sé bien para qué es","No"]},
+ p10:{type:"radio",opts:["Sí","Algo escuché","No"]},
+ p11:{type:"radio",opts:["Sí, conozco casos o señales","Probablemente sí","No creo","No sé"]},
+ p12:{type:"check",opts:[
+   "Santa Josefina Bakhita, patrona de las víctimas de la trata",
+   "Jornada Mundial de Oración contra la Trata (8 de febrero)",
+   "Grupo Santa Marta (impulsado por el Papa Francisco)",
+   "Orientaciones Pastorales sobre la Trata de Personas (Vaticano, 2019)",
+   "Comisión Nacional de Justicia y Paz (Argentina)",
+   "Curas villeros / Hogar de Cristo",
+   "Talitha Kum (red de religiosas contra la trata)",
+   "Ninguna"]},
+ p13:{type:"scale",ends:["Muy en desacuerdo","Muy de acuerdo"]},
+ p14:{type:"scale",ends:["Nunca se habla","Se habla mucho"]},
+ p15:{type:"radio",opts:["Educar y prevenir (charlas, catequesis, escuelas)","Acompañar y contener a las víctimas","Denunciar públicamente y presionar a las autoridades","Trabajar en red con el Estado y las ONG","La Iglesia no debería intervenir en este tema"]},
+ p16:{type:"radio",opts:["Llamaría a la Línea 145 o haría la denuncia","Avisaría a la policía","Hablaría con alguien de confianza (parroquia, referente del barrio)","No haría nada por miedo a represalias","No sé qué haría"]},
+ p17:{type:"check",max:3,opts:["Charlas en escuelas y parroquias","Difundir la Línea 145","Más controles a talleres, boliches y ofertas de trabajo","Acompañar a jóvenes y familias vulnerables (trabajo, estudio)","Formación de agentes pastorales y referentes barriales","Campañas en redes sociales","Espacios de escucha y contención en el barrio"]},
+ p18:{type:"text"}
+};
+
+const SHORT={p1:"Edad",p2:"Género",p3:"Estudios",p4:"Religión",p5:"Participa en comunidad religiosa",p6:"Zona",p7:"Qué entiende por trata",p8:"Formas de trata que conoce",p9:"Conoce la Línea 145",p10:"Conoce la ley 26.364/26.842",p11:"Cree que hay trata en su barrio/ciudad",p12:"Iniciativas religiosas que conoce",p13:"Rol importante de las religiones (1 a 5)",p14:"Se habla del tema en su comunidad (1 a 5)",p15:"Aporte principal de la Iglesia",p16:"Qué haría ante una sospecha",p17:"Acciones de prevención más útiles"};
+let filas=[];
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function render(){
+  const n=filas.length;
+  document.getElementById("total").textContent=n;
+  document.getElementById("upd").textContent=" · actualizado "+new Date().toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
+  let h="";
+  Object.keys(SHORT).forEach(id=>{
+    const q=Q[id], opts=q.type==="scale"?["1","2","3","4","5"]:q.opts, c=opts.map(()=>0);
+    filas.forEach(f=>String(f[id]??"").split("; ").forEach(v=>{const i=opts.indexOf(String(v));if(i>=0)c[i]++;}));
+    let extra="";
+    if(q.type==="scale"){const vals=filas.map(f=>Number(f[id])).filter(x=>x>0);if(vals.length)extra=" · promedio "+(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1).replace(".",",");}
+    const lab=q.type==="scale"?opts.map((o,i)=>o+(i===0?" ("+q.ends[0]+")":i===4?" ("+q.ends[1]+")":"")):opts;
+    h+=`<div class="box chart"><h3>${SHORT[id]}${q.type==="check"?" <small style='font-weight:400;color:var(--muted)'>(respuesta múltiple)</small>":""}<small style='font-weight:400;color:var(--muted)'>${extra}</small></h3>`+
+      lab.map((o,i)=>{const p=n?Math.round(c[i]*100/n):0;return `<div class="row"><span>${esc(o)}</span><div class="track"><div class="fill" style="width:${p}%"></div></div><span class="n">${c[i]} · ${p}%</span></div>`}).join("")+"</div>";
+  });
+  document.getElementById("charts").innerHTML=h;
+  const cs=filas.map(f=>String(f.p18??"").trim()).filter(Boolean);
+  document.getElementById("coms").innerHTML=cs.length?cs.map(c=>`<div class="com">“${esc(c)}”</div>`).join(""):"<span class='sub'>Todavía no hay comentarios.</span>";
+}
+function cargar(){
+  const k=document.getElementById("clave").value.trim(), err=document.getElementById("err");
+  if(!SCRIPT_URL){err.textContent="Falta configurar la URL de Apps Script.";return;}
+  err.textContent="Cargando...";
+  fetch(SCRIPT_URL+"?clave="+encodeURIComponent(k)).then(r=>r.json()).then(d=>{
+    if(d.error){err.textContent=d.error;return;}
+    err.textContent=""; filas=d.filas||[];
+    try{sessionStorage.setItem("clave",k)}catch(e){}
+    document.getElementById("res").style.display="block"; render();
+  }).catch(()=>err.textContent="No se pudo conectar. Probá de nuevo en un rato.");
+}
+document.getElementById("ver").onclick=cargar;
+document.getElementById("reload").onclick=cargar;
+document.getElementById("clave").addEventListener("keydown",e=>{if(e.key==="Enter")cargar();});
+try{const k=sessionStorage.getItem("clave");if(k){document.getElementById("clave").value=k;cargar();}}catch(e){}
+document.getElementById("csv").onclick=()=>{
+  const cols=["fecha"].concat(Object.keys(Q));
+  const csv=[cols.join(",")].concat(filas.map(f=>cols.map(c=>'"'+String(f[c]??"").replace(/"/g,'""')+'"').join(","))).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download="respuestas-encuesta.csv";a.click();
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encuesta sobre trata</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1f2328;--muted:#5b616b;--accent:#7a2e3a;--accent-soft:#f3e6e8;--line:#e2ddd3;--ok:#2f6b3f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181b;--card:#212328;--ink:#e9e7e2;--muted:#a3a7ae;--accent:#d98a96;--accent-soft:#3a2a2e;--line:#34363c;--ok:#7cc48d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+header{border-bottom:3px solid var(--accent);padding-bottom:16px;margin-bottom:20px}
+h1{font-size:1.6rem;margin:0 0 6px;line-height:1.25}
+.sub{color:var(--muted);margin:0}
+.intro{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px}
+.intro p{margin:.4em 0}
+fieldset{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:16px 18px 6px;margin:0 0 18px}
+legend{font-weight:700;color:var(--accent);padding:0 6px;font-size:1.05rem}
+.q{margin:0 0 18px}
+.q>.t{font-weight:600;margin-bottom:6px;display:block}
+.q .hint{color:var(--muted);font-size:.88rem;font-weight:400}
+label.opt{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border-radius:6px;cursor:pointer}
+label.opt:hover{background:var(--accent-soft)}
+label.opt input{margin-top:4px;accent-color:var(--accent)}
+.scale{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.scale label{display:flex;flex-direction:column;align-items:center;min-width:48px;padding:6px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.scale input{accent-color:var(--accent)}
+.scale .ends{width:100%;display:flex;justify-content:space-between;color:var(--muted);font-size:.82rem}
+textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit;background:var(--bg);color:var(--ink)}
+button{font:inherit;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:11px 18px;cursor:pointer;font-weight:600}
+button.sec{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+#out{display:none;background:var(--card);border:2px solid var(--ok);border-radius:10px;padding:16px;margin-top:20px}
+#out pre{white-space:pre-wrap;background:var(--bg);padding:12px;border-radius:8px;font-size:.9rem;max-height:340px;overflow:auto}
+.help{font-size:.9rem;color:var(--muted);border-top:1px solid var(--line);margin-top:28px;padding-top:12px}
+.err{color:#b3261e;font-weight:600;display:none;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Encuesta: la trata de personas y el rol de la Iglesia y las religiones</h1>
+  <p class="sub">Doctrina Social de la Iglesia · Tema 11</p>
+</header>
+
+<div class="intro">
+  <p>Esta encuesta es parte de un trabajo académico sobre la Doctrina Social de la Iglesia y la lucha contra la trata de personas. Es <strong>anónima</strong>, lleva unos <strong>5 minutos</strong> y no hay respuestas correctas ni incorrectas: nos interesa lo que vos sabés y pensás.</p>
+  <p>Está dirigida a personas mayores de 18 años.</p>
+</div>
+
+<form id="f" novalidate>
+<fieldset>
+  <legend>A. Sobre vos</legend>
+  <div class="q" data-q="p1"><span class="t">1. Edad</span></div>
+  <div class="q" data-q="p2"><span class="t">2. Género</span></div>
+  <div class="q" data-q="p3"><span class="t">3. Máximo nivel de estudios</span></div>
+  <div class="q" data-q="p4"><span class="t">4. Religión o credo</span></div>
+  <div class="q" data-q="p5"><span class="t">5. ¿Participás de alguna comunidad religiosa (parroquia, templo, grupo)?</span></div>
+  <div class="q" data-q="p6"><span class="t">6. ¿Dónde vivís?</span></div>
+</fieldset>
+
+<fieldset>
+  <legend>B. Lo que sabés sobre la trata</legend>
+  <div class="q" data-q="p7"><span class="t">7. ¿Cuál de estas frases se acerca más a lo que entendés por "trata de personas"?</span></div>
+  <div class="q" data-q="p8"><span class="t">8. ¿Qué formas de trata conocés o escuchaste nombrar? <span class="hint">(podés marcar varias)</span></span></div>
+  <div class="q" data-q="p9"><span class="t">9. ¿Conocés la Línea 145 para denunciar casos de trata?</span></div>
+  <div class="q" data-q="p10"><span class="t">10. ¿Sabías que en Argentina existe una ley específica de prevención y sanción de la trata (Ley 26.364, modificada por la 26.842)?</span></div>
+  <div class="q" data-q="p11"><span class="t">11. ¿Creés que en tu barrio o ciudad hay situaciones de trata o explotación?</span></div>
+</fieldset>
+
+<fieldset>
+  <legend>C. La Iglesia y las religiones frente a la trata</legend>
+  <div class="q" data-q="p12"><span class="t">12. ¿Cuáles de estas iniciativas, figuras o documentos conocés? <span class="hint">(podés marcar varias)</span></span></div>
+  <div class="q" data-q="p13"><span class="t">13. "La Iglesia y las demás religiones tienen un papel importante en la prevención de la trata."</span></div>
+  <div class="q" data-q="p14"><span class="t">14. "En mi comunidad religiosa o en mi barrio se habla del tema de la trata."</span></div>
+  <div class="q" data-q="p15"><span class="t">15. Para vos, ¿cuál debería ser el aporte <em>principal</em> de la Iglesia en este tema?</span></div>
+</fieldset>
+
+<fieldset>
+  <legend>D. Prevención y acción</legend>
+  <div class="q" data-q="p16"><span class="t">16. Si sospecharas que una persona está siendo víctima de trata, ¿qué harías primero?</span></div>
+  <div class="q" data-q="p17"><span class="t">17. ¿Qué acciones te parecen más útiles para prevenir la trata en los barrios? <span class="hint">(hasta 3)</span></span></div>
+  <div class="q" data-q="p18"><span class="t">18. ¿Querés agregar alguna opinión, experiencia o propuesta? <span class="hint">(opcional)</span></span></div>
+</fieldset>
+
+<p class="err" id="err">Faltan responder algunas preguntas (marcadas en rojo).</p>
+<div class="actions">
+  <button type="submit">Enviar respuestas</button>
+  <button type="reset" class="sec">Borrar todo</button>
+</div>
+</form>
+
+<div id="out">
+  <div id="okmsg"><h2 style="margin-top:0">¡Gracias por responder!</h2><p>Tus respuestas se enviaron correctamente.</p></div>
+  <div id="fallback"><h2 style="margin-top:0">No se pudieron enviar automáticamente</h2>
+  <p>Copiá tus respuestas y mandalas por WhatsApp a quien te compartió la encuesta.</p>
+  <pre id="txt"></pre>
+  <div class="actions"><button id="copy">Copiar respuestas</button><button id="wa" class="sec">Enviar por WhatsApp</button></div></div>
+</div>
+
+<p class="help">Si vos o alguien que conocés necesita ayuda: <strong>Línea 145</strong> (Argentina), gratuita, anónima y las 24 horas, para denunciar o pedir orientación sobre trata de personas.</p>
+</div>
+
+<script>
+// Pegá acá la URL de la aplicación web de Google Apps Script (termina en /exec)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvy_4gvbq1bUNY8BaDPSzTjvZ1rbIHEG3j6Js-DcJZLsCxoKTvHP0CDk5ufFEpKpNr/exec";
+const Q = {
+ p1:{type:"radio",opts:["18 a 25","26 a 35","36 a 50","51 a 65","66 o más"]},
+ p2:{type:"radio",opts:["Mujer","Varón","Otro / prefiero no decir"]},
+ p3:{type:"radio",opts:["Primario","Secundario incompleto","Secundario completo","Terciario o universitario (en curso o completo)"]},
+ p4:{type:"radio",opts:["Católica","Evangélica / protestante","Judía","Musulmana","Otra","Ninguna"]},
+ p5:{type:"radio",opts:["Sí, regularmente","A veces","No"]},
+ p6:{type:"radio",opts:["Ciudad de Buenos Aires","Conurbano bonaerense","Interior del país"]},
+ p7:{type:"radio",opts:[
+   "Captar, trasladar o recibir personas para explotarlas (sexual, laboralmente u otras formas)",
+   "Es lo mismo que la prostitución",
+   "Es pasar personas por la frontera de forma ilegal",
+   "No sé bien qué es"]},
+ p8:{type:"check",opts:["Explotación sexual","Explotación laboral (talleres textiles, campo, construcción)","Servidumbre o trabajo doméstico forzado","Matrimonio forzado","Mendicidad forzada","Extracción de órganos","No conozco ninguna"]},
+ p9:{type:"radio",opts:["Sí, la conozco","Escuché hablar, pero no sé bien para qué es","No"]},
+ p10:{type:"radio",opts:["Sí","Algo escuché","No"]},
+ p11:{type:"radio",opts:["Sí, conozco casos o señales","Probablemente sí","No creo","No sé"]},
+ p12:{type:"check",opts:[
+   "Santa Josefina Bakhita, patrona de las víctimas de la trata",
+   "Jornada Mundial de Oración contra la Trata (8 de febrero)",
+   "Grupo Santa Marta (impulsado por el Papa Francisco)",
+   "Orientaciones Pastorales sobre la Trata de Personas (Vaticano, 2019)",
+   "Comisión Nacional de Justicia y Paz (Argentina)",
+   "Curas villeros / Hogar de Cristo",
+   "Talitha Kum (red de religiosas contra la trata)",
+   "Ninguna"]},
+ p13:{type:"scale",ends:["Muy en desacuerdo","Muy de acuerdo"]},
+ p14:{type:"scale",ends:["Nunca se habla","Se habla mucho"]},
+ p15:{type:"radio",opts:["Educar y prevenir (charlas, catequesis, escuelas)","Acompañar y contener a las víctimas","Denunciar públicamente y presionar a las autoridades","Trabajar en red con el Estado y las ONG","La Iglesia no debería intervenir en este tema"]},
+ p16:{type:"radio",opts:["Llamaría a la Línea 145 o haría la denuncia","Avisaría a la policía","Hablaría con alguien de confianza (parroquia, referente del barrio)","No haría nada por miedo a represalias","No sé qué haría"]},
+ p17:{type:"check",max:3,opts:["Charlas en escuelas y parroquias","Difundir la Línea 145","Más controles a talleres, boliches y ofertas de trabajo","Acompañar a jóvenes y familias vulnerables (trabajo, estudio)","Formación de agentes pastorales y referentes barriales","Campañas en redes sociales","Espacios de escucha y contención en el barrio"]},
+ p18:{type:"text"}
+};
+const req = Object.keys(Q).filter(k=>k!=="p18");
+
+document.querySelectorAll(".q").forEach(div=>{
+  const id=div.dataset.q, q=Q[id]; let h="";
+  if(q.type==="radio"||q.type==="check"){
+    const t=q.type==="radio"?"radio":"checkbox";
+    q.opts.forEach((o,i)=>h+=`<label class="opt"><input type="${t}" name="${id}" value="${o}"><span>${o}</span></label>`);
+  } else if(q.type==="scale"){
+    h='<div class="scale">'+[1,2,3,4,5].map(n=>`<label><input type="radio" name="${id}" value="${n}">${n}</label>`).join("")+`<div class="ends"><span>1 = ${q.ends[0]}</span><span>5 = ${q.ends[1]}</span></div></div>`;
+  } else h=`<textarea name="${id}" placeholder="Escribí acá..."></textarea>`;
+  div.insertAdjacentHTML("beforeend",h);
+});
+
+// "Ninguna" excluye al resto; límite de 3 en p17
+document.addEventListener("change",e=>{
+  const el=e.target; if(el.type!=="checkbox")return;
+  const box=[...document.querySelectorAll(`input[name=${el.name}]`)];
+  if(/^(Ninguna|No conozco ninguna)$/.test(el.value)&&el.checked) box.forEach(b=>{if(b!==el)b.checked=false});
+  else if(el.checked) box.forEach(b=>{if(/^(Ninguna|No conozco ninguna)$/.test(b.value))b.checked=false});
+  const max=Q[el.name].max; if(max&&box.filter(b=>b.checked).length>max){el.checked=false;alert("Elegí hasta "+max+" opciones.");}
+});
+
+function val(id){
+  const q=Q[id];
+  if(q.type==="text")return document.querySelector(`[name=${id}]`).value.trim();
+  const c=[...document.querySelectorAll(`input[name=${id}]:checked`)].map(i=>i.value);
+  return q.type==="check"?c:(c[0]||"");
+}
+document.getElementById("f").addEventListener("submit",e=>{
+  e.preventDefault(); let bad=false;
+  req.forEach(id=>{const v=val(id),miss=Array.isArray(v)?!v.length:!v;
+    document.querySelector(`[data-q=${id}] .t`).style.color=miss?"#b3261e":""; if(miss)bad=true;});
+  document.getElementById("err").style.display=bad?"block":"none";
+  if(bad){document.querySelector('.t[style*="179"]')?.scrollIntoView({behavior:"smooth",block:"center"});return;}
+  const lines=["ENCUESTA TRATA DE PERSONAS - RESPUESTAS"];
+  Object.keys(Q).forEach(id=>{
+    const tc=document.querySelector(`[data-q=${id}] .t`).cloneNode(true);tc.querySelectorAll(".hint").forEach(h=>h.remove());const title=tc.textContent.trim();
+    const v=val(id); lines.push(title+" "+(Array.isArray(v)?v.join("; "):(v||"-")));
+  });
+  const txt=lines.join("\n");
+  const data={}; Object.keys(Q).forEach(id=>data[id]=val(id));
+  const btn=document.querySelector("button[type=submit]");
+  const done=ok=>{
+    document.getElementById("f").style.display=ok?"none":"";
+    document.getElementById("out").style.display="block";
+    document.getElementById("okmsg").style.display=ok?"block":"none";
+    document.getElementById("fallback").style.display=ok?"none":"block";
+    document.getElementById("txt").textContent=txt;
+    document.getElementById("out").scrollIntoView({behavior:"smooth"});
+  };
+  document.getElementById("copy").onclick=()=>navigator.clipboard.writeText(txt).then(()=>alert("Copiado"));
+  document.getElementById("wa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(txt),"_blank");
+  if(!SCRIPT_URL){done(false);return;}
+  btn.disabled=true; btn.textContent="Enviando...";
+  fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)})
+    .then(()=>done(true)).catch(()=>{btn.disabled=false;btn.textContent="Enviar respuestas";done(false);});
+});
+</script>
+</body>
+</html>
